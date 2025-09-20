@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from .executors import Executor, LLMExecutor
+from .factories import ExecutorFactory
 from .hooks import StepObserver
 from .spec import StepKind, StepRequest, StepResponse, WorkflowSpec
 
@@ -18,10 +19,17 @@ class WorkflowOrchestrator:
         *,
         observer: StepObserver | None = None,
         executors: dict[StepKind, Executor] | None = None,
+        executor_factory: ExecutorFactory | None = None,
     ) -> None:
         self.spec = spec
         self.observer = observer
-        self._executors = executors or {StepKind.LLM: LLMExecutor()}
+        factory = executor_factory or ExecutorFactory.default()
+        if executors:
+            for kind, executor in executors.items():
+                factory.register_instance(kind, executor, override=True)
+        if not factory.is_registered(StepKind.LLM):
+            factory.register_singleton(StepKind.LLM, lambda _: LLMExecutor())
+        self.executor_factory = factory
         self._memory_path = Path(spec.memory_file)
 
     def run(self) -> list[StepResponse]:
@@ -39,7 +47,7 @@ class WorkflowOrchestrator:
                 config=step.config,
             )
             self._notify_start(request)
-            executor = self._executor_for(step.kind)
+            executor = self.executor_factory.create(step.kind)
             response = executor.execute(request)
             responses.append(response)
             if response.status == "fail":
@@ -49,13 +57,6 @@ class WorkflowOrchestrator:
             self._notify_finish(request, response)
             self._append_memory(self._format_summary(step.name, response))
         return responses
-
-    def _executor_for(self, kind: StepKind) -> Executor:
-        try:
-            return self._executors[kind]
-        except KeyError as exc:  # pragma: no cover - defensive
-            msg = f"No executor registered for step kind '{kind.value}'"
-            raise ValueError(msg) from exc
 
     def _read_memory(self) -> str:
         if not self._memory_path.exists():
