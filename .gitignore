@@ -182,7 +182,7 @@ docs/_static/
 docs/_templates/
 
 # IDEs & Editors
-.vscode/
+# .vscode/                    # Commented out - we want to commit workspace settings
 .idea/
 *.swp
 *.swo

@@ -10,7 +10,15 @@ A basic Python project for MCP workflows.
 
 ## Usage
 
-Run the main script: `make run` or `python -m mcp_workflows.main`
+Generate a demo workflow YAML file:
+
+```bash
+python -m mcp_workflows.main --goal "Sketch a sample workflow" --out workflows/demo.yaml --memory memory.md
+```
+
+The command uses the fluent builder to create a workflow specification and saves it to the
+requested path. Add `--run` to execute the canned orchestrator and append a summary line to the
+memory file.
 
 ## Project Structure
 
@@ -18,9 +26,22 @@ Run the main script: `make run` or `python -m mcp_workflows.main`
 ├── src/
 │   └── mcp_workflows/
 │       ├── __init__.py
-│       └── main.py
+│       ├── builder.py
+│       ├── cli.py
+│       ├── executors.py
+│       ├── hooks.py
+│       ├── main.py
+│       ├── orchestrator.py
+│       └── spec.py
+├── tasks/
+│   ├── normalize.md
+│   └── quality_gate.md
 ├── tests/
-│   └── test_main.py
+│   ├── test_builder.py
+│   ├── test_cli.py
+│   └── test_orchestrator.py
+├── workflows/
+│   └── .gitkeep
 ├── docs/
 ├── pyproject.toml
 ├── Makefile
