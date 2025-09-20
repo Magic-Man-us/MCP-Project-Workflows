@@ -1,0 +1,109 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mcp-workflows"
+version = "0.1.0"
+description = "A basic Python project"
+authors = [{name = "Your Name"}]
+dependencies = [
+    "pydantic",
+    "python-dotenv",
+]
+optional-dependencies = {dev = [
+    "pytest",
+    "pytest-cov",
+    "black",
+    "ruff",
+    "coverage[toml]",
+    "sphinx",
+]}
+
+[tool.setuptools]
+packages.find = {where = ["src"]}
+
+[tool.black]
+line-length = 100
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "N",   # pep8-naming
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "A",   # flake8-builtins
+    "C4",  # flake8-comprehensions
+    "T10", # flake8-debugger
+    "DJ",  # flake8-django
+    "EM",  # flake8-errmsg
+    "EXE", # flake8-executable
+    "FA",  # flake8-future-annotations
+    "ISC", # flake8-implicit-str-concat
+    "ICN", # flake8-import-conventions
+    "G",   # flake8-logging-format
+    "INP", # flake8-no-pep420
+    "PIE", # flake8-pie
+    "T20", # flake8-print
+    "PYI", # flake8-pyi
+    "PT",  # flake8-pytest-style
+    "Q",   # flake8-quotes
+    "RSE", # flake8-raise
+    "RET", # flake8-return
+    "SLF", # flake8-self
+    "SLOT", # flake8-slots
+    "SIM", # flake8-simplify
+    "TID", # flake8-tidy-imports
+    "TCH", # flake8-type-checking
+    "INT", # flake8-gettext
+    "ARG", # flake8-unused-arguments
+    "PTH", # flake8-use-pathlib
+    "ERA", # eradicate
+    "PD",  # pandas-vet
+    "PGH", # pygrep-hooks
+    "PL",  # pylint
+    "TRY", # tryceratops
+    "FLY", # flynt
+    "NPY", # numpy
+    "AIR", # airflow
+    "PERF", # perflint
+    "FURB", # refurb
+    "LOG", # flake8-logging
+    "RUF", # ruff
+]
+ignore = [
+    "E501",  # line too long, handled by black
+]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-v --tb=short --strict-markers --cov=. --cov-report=term-missing --cov-report=html"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["."]
+omit = [
+    "*/tests/*",
+    "*/venv/*",
+    ".venv_workflows/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == \"__main__\":",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
