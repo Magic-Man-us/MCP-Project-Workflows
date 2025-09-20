@@ -1,0 +1,9 @@
+pydantic
+python-dotenv
+pyyaml
+pytest
+pytest-cov
+black
+ruff
+coverage[toml]
+sphinx

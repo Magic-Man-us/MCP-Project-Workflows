@@ -10,6 +10,7 @@ authors = [{name = "Your Name"}]
 dependencies = [
     "pydantic",
     "python-dotenv",
+    "pyyaml",
 ]
 optional-dependencies = {dev = [
     "pytest",
