@@ -1,0 +1,15 @@
+goal: Sketch a sample workflow
+memory_file: memory.md
+tasks:
+- id: normalize
+  file: tasks/normalize.md
+- id: quality_gate
+  file: tasks/quality_gate.md
+steps:
+- id: 1
+  name: Demo Plan
+  kind: llm
+  doc: Collect requirements and outline the work to perform.
+  uses:
+  - normalize
+  - quality_gate

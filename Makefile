@@ -5,14 +5,22 @@ VENV = .venv_workflows/bin
 PYTHON = $(VENV)/python
 PIP = $(VENV)/pip
 
-.PHONY: help install test lint format docs clean run coverage
+.PHONY: help install test lint format docs clean run coverage recreate-venv
 
 help: ## Show this help message
 	@echo "Available commands:"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-15s %s\n", $$1, $$2}'
 
+recreate-venv: ## Completely recreate the virtual environment
+	rm -rf .venv_workflows
+	python3 -m venv .venv_workflows
+	$(PIP) install --upgrade pip
+	$(PIP) install -e .[dev]
+	$(PIP) install -e .
+
 install: ## Install dependencies
 	$(PIP) install -e .[dev]
+	$(PIP) install -e .
 
 test: ## Run tests
 	$(PYTHON) -m pytest
