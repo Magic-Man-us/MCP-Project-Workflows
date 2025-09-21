@@ -687,8 +687,6 @@ class SlackExecutor(Executor):
         pass
 ```
 
-## Conclusion
-
 MCP Workflow Builder provides a **structured, extensible framework** for creating complex workflows that combine AI, automation, and human oversight. Key strengths:
 
 - **Immutable Specifications**: Thread-safe, testable workflow definitions

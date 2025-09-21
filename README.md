@@ -375,13 +375,12 @@ factory.register_factory(
 ```
 
 #### Dependency Injection Flow
-
 ```mermaid
 graph TD
-    A[ServiceContainer] --> B[register_singleton()]
+    A[ServiceContainer] --> B[register_singleton]
     B --> C[Store factory function]
-    D[ExecutorFactory(container)] --> E[create(step_kind)]
-    E --> F[Container.resolve(key)]
+    D[ExecutorFactory] --> E[create]
+    E --> F[Container.resolve]
     F --> G{Cached singleton?}
     G -->|Yes| H[Return cached instance]
     G -->|No| I[Call factory function]
@@ -817,8 +816,6 @@ class SlackExecutor(Executor):
         # Send Slack notifications
         pass
 ```
-
-## Conclusion
 
 MCP Workflow Builder provides a **structured, extensible framework** for creating complex workflows that combine AI, automation, and human oversight. Key strengths:
 
