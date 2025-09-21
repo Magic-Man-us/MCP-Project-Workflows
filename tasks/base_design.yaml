@@ -1,0 +1,17 @@
+name: design
+objective: "Design the solution architecture and approach"
+description: "Plan the solution structure, algorithms, data flow, interfaces, and error handling approach"
+prerequisites:
+  - "Requirements gathered"
+substeps:
+  - "Design solution structure and architecture"
+  - "Plan algorithms and data flow"
+  - "Define interfaces and modules"
+  - "Consider error handling approach"
+instructions: "Create a comprehensive design that addresses all requirements while considering maintainability, scalability, and error conditions."
+expected_output: "Complete design specification ready for implementation"
+success_criteria:
+  - "Solution structure defined"
+  - "Algorithms and data flow planned"
+  - "Interfaces designed"
+  - "Error handling considered"

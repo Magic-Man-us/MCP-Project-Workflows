@@ -36,42 +36,11 @@ WorkflowBuilder.start() \
     .compile()
 ```
 
-```mermaid
-graph LR
-    A["WorkflowBuilder.start()"] --> B["with_goal('...')"]
-    B --> C["memory('...')"]
-    C --> D["register_task('...', file='...')"]
-    D --> E["add_step('Design', kind='llm', uses=[...])"]
-    E --> F["register_task('...', file='...')"]
-    F --> G["add_step('Implement', ...)"]
-    G --> H["compile()"]
-    H --> I["WorkflowSpec"]
-```
-
 #### 3. **WorkflowOrchestrator** - Execution Engine
 Executes compiled workflows step-by-step:
 ```python
 orchestrator = WorkflowOrchestrator(spec)
 responses = orchestrator.run()  # Returns StepResponse list
-```
-
-```mermaid
-graph TD
-    A["WorkflowOrchestrator"] --> B["Load Memory File"]
-    B --> C["For Each Step in WorkflowSpec"]
-    C --> D["Create StepRequest"]
-    D --> E["Resolve Executor by StepKind"]
-    E --> F["Executor.execute(request)"]
-    F --> G{"Response Status?"}
-    G -->|OK| H["Notify Observer.on_finish"]
-    G -->|FAIL| I["Notify Observer.on_error"]
-    G -->|RETRY| J["Handle Retry Logic"]
-    H --> K["Append Result to Memory"]
-    I --> K
-    K --> L{"Has Next Step?"}
-    J --> C
-    L -->|Yes| C
-    L -->|No| M["Return All StepResponses"]
 ```
 
 #### 4. **Executors** - Pluggable Execution Strategies
@@ -98,24 +67,6 @@ steps:
 ```
 
 This creates a **guidance-based workflow** where each step gets relevant documentation injected as context.
-
-#### How Tasks and Steps Work Together
-
-```mermaid
-graph TD
-    A[Task: requirements] --> B[Markdown content with requirements guidelines]
-    C[Task: design] --> D[Design principles and approach]
-    E[Task: implement] --> F[Coding standards and best practices]
-
-    B --> G[Step 1: Gather Requirements]
-    G --> H[uses requirement task content as context]
-
-    D --> I[Step 2: Design Solution]
-    I --> J[uses design + requirements context]
-
-    F --> K[Step 3: Implement Code]
-    K --> L[uses implement + design + requirements]
-```
 
 ## How to Use MCP Workflow Builder
 
@@ -313,23 +264,6 @@ class DataScienceTemplate(WorkflowTemplate):
         ]
 ```
 
-#### Template Creation Flow
-
-```mermaid
-graph TD
-    A[Extend WorkflowTemplate] --> B[Define name]
-    B --> C[Set goal]
-    C --> D[Configure memory_file]
-    D --> E[Define base_tasks]
-    E --> F[Implement __post_init__]
-
-    F --> G[Create StepSpec list]
-    G --> H[User calls create_workflow_from_template]
-    H --> I[Template converts BaseTasks to TaskSpecs]
-    I --> J[template.tasks property]
-    J --> K[Builder creates WorkflowSpec]
-```
-
 ### Custom Executors
 
 ```python
@@ -372,21 +306,6 @@ factory.register_factory(
     "ml_prediction",
     lambda c: MLExecutor(c.resolve("api_client"))
 )
-```
-
-#### Dependency Injection Flow
-
-```mermaid
-graph TD
-    A[ServiceContainer] --> B[register_singleton()]
-    B --> C[Store factory function]
-    D[ExecutorFactory(container)] --> E[create(step_kind)]
-    E --> F[Container.resolve(key)]
-    F --> G{Cached singleton?}
-    G -->|Yes| H[Return cached instance]
-    G -->|No| I[Call factory function]
-    I --> J[Cache singleton]
-    J --> H
 ```
 
 ## Tips, Tricks & Best Practices
@@ -460,30 +379,6 @@ class ComprehensiveMonitor:
         # Auto-retry logic
         if should_retry(response.error):
             return RetryDecision(retries_left=3)
-```
-
-#### Observer Lifecycle Diagram
-
-```mermaid
-sequenceDiagram
-    participant W as WorkflowOrchestrator
-    participant O as Observer
-    participant E as Executor
-    participant M as Memory
-
-    W->>O: on_step_start(request)
-    W->>E: execute(request)
-    E-->>W: StepResponse
-    alt Status OK
-        W->>O: on_step_finish(request, response)
-        W->>M: append_result()
-    else Status FAIL
-        W->>O: on_step_error(request, response)
-        W->>M: append_error()
-    else Status RETRY
-        W->>O: on_step_error(request, response)
-        W->>W: retry_logic()
-    end
 ```
 
 ### 5. Parallel Subworkflows
@@ -608,32 +503,6 @@ class DebugMonitor:
     def on_step_finish(self, request, response):
         print(f"DEBUG: Response: {response}")
         print(f"DEBUG: Memory updated: {response.status}")
-```
-
-#### Troubleshooting Decision Flow
-
-```mermaid
-flowchart TD
-    A[Workflow Step Fails] --> B{Error Type?}
-    B -->|Execution Timeout| C[Configure step timeouts]
-    B -->|Command Injection| D[Use args list instead of string]
-    B -->|Environment Missing| E[Check ENV variables set]
-    B -->|Network Failure| F[Add retry logic]
-    B -->|File Permission| G[Verify path permissions]
-    B -->|Memory Corruption| H[Check concurrent access]
-
-    C --> I[Log detailed error info]
-    D --> I
-    E --> I
-    F --> I
-    G --> I
-    H --> I
-
-    I --> J[Enable Debug Monitor]
-    J --> K[Check request/response data]
-    K --> L[Validate executor configuration]
-    L --> M[Verify task/step relationships]
-    M --> N[Test with minimal example]
 ```
 
 ## Performance Optimization

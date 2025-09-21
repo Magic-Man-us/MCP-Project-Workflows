@@ -1,0 +1,17 @@
+name: test
+objective: "Test code thoroughly and ensure quality"
+description: "Write unit tests, test edge cases, error conditions, and verify the implementation meets all requirements"
+prerequisites:
+  - "Code implemented"
+substeps:
+  - "Write unit tests for key functions"
+  - "Test edge cases and error conditions"
+  - "Review code for bugs and optimization"
+  - "Suggest improvements"
+instructions: "Create comprehensive tests covering normal operation, edge cases, and error conditions. Verify all requirements are met."
+expected_output: "Thoroughly tested code with identified issues addressed"
+success_criteria:
+  - "Unit tests written for key functions"
+  - "Edge cases and errors tested"
+  - "Code reviewed for quality"
+  - "Improvement suggestions provided"

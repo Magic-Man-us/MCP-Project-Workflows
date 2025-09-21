@@ -1,0 +1,15 @@
+name: requirements
+objective: "Gather and clarify all requirements for the coding task"
+description: "Collect functional requirements, constraints, input/output specifications, and understand success criteria"
+substeps:
+  - "Identify functional requirements"
+  - "Identify constraints and edge cases"
+  - "Clarify input/output specifications"
+  - "Note dependencies and prerequisites"
+instructions: "Analyze the task requirements thoroughly. Consider all possible inputs, edge cases, and success criteria."
+expected_output: "Complete requirements specification ready for design phase"
+success_criteria:
+  - "All functional requirements documented"
+  - "Constraints and edge cases identified"
+  - "Input/output specifications clear"
+  - "Dependencies documented"

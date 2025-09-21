@@ -29,6 +29,91 @@ class Branch:
 
 
 @dataclass(frozen=True, slots=True)
+class BaseTask:
+    """Base task definition with structured metadata for single-responsibility workflows."""
+
+    name: str
+    objective: str  # The single purpose/responsibility
+    description: str  # Detailed explanation
+
+    # Additional context and resources
+    sites_to_visit: tuple[str, ...] = field(default_factory=tuple)
+    substeps: tuple[str, ...] = field(default_factory=tuple)
+    prerequisites: tuple[str, ...] = field(default_factory=tuple)
+
+    # Execution details
+    instructions: str = ""
+    expected_output: str = ""
+    success_criteria: tuple[str, ...] = field(default_factory=tuple)
+
+    def to_task_spec(self, task_dir: str = "tasks") -> TaskSpec:
+        """Convert to a TaskSpec that can be used in workflows."""
+        task_content = self._generate_task_content()
+        return TaskSpec(id=self.name, text=task_content)
+
+    def _generate_task_content(self) -> str:
+        """Generate the complete task content for this base task."""
+        content_parts = [
+            f"# {self.name}",
+            "## Objective",
+            f"{self.objective}",
+            "",
+            "## Description",
+            f"{self.description}",
+        ]
+
+        if self.prerequisites:
+            content_parts.extend([
+                "",
+                "## Prerequisites",
+                *[f"- {prereq}" for prereq in self.prerequisites]
+            ])
+
+        if self.sites_to_visit:
+            content_parts.extend([
+                "",
+                "## Resources",
+                *[f"- {site}" for site in self.sites_to_visit]
+            ])
+
+        if self.substeps:
+            content_parts.extend([
+                "",
+                "## Substeps",
+                *[f"- {step}" for step in self.substeps]
+            ])
+
+        content_parts.extend([
+            "",
+            "## Instructions",
+            f"{self.instructions}",
+        ])
+
+        if self.expected_output:
+            content_parts.extend([
+                "",
+                "## Expected Output",
+                f"{self.expected_output}"
+            ])
+
+        if self.success_criteria:
+            content_parts.extend([
+                "",
+                "## Success Criteria",
+                *[f"- {criteria}" for criteria in self.success_criteria]
+            ])
+
+        return "\n".join(content_parts)
+
+    def __post_init__(self) -> None:
+        # Convert lists to tuples for immutability
+        object.__setattr__(self, "sites_to_visit", tuple(self.sites_to_visit))
+        object.__setattr__(self, "substeps", tuple(self.substeps))
+        object.__setattr__(self, "prerequisites", tuple(self.prerequisites))
+        object.__setattr__(self, "success_criteria", tuple(self.success_criteria))
+
+
+@dataclass(frozen=True, slots=True)
 class TaskSpec:
     """Reusable document that can be referenced by workflow steps."""
 

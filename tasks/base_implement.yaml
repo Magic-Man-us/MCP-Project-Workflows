@@ -1,0 +1,21 @@
+name: implement
+objective: "Implement production-ready code following best practices"
+description: "Write clean, readable, well-structured code that follows language conventions and handles errors properly"
+prerequisites:
+  - "Design completed"
+substeps:
+  - "Write clean, readable code"
+  - "Follow language best practices"
+  - "Add meaningful comments"
+  - "Handle exceptions properly"
+sites_to_visit:
+  - "https://peps.python.org/pep-0008/"
+  - "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/index.html"
+  - "https://developer.mozilla.org/en-US/docs/Web/JavaScript"
+instructions: "Implement the code following the design specifications. Add comprehensive error handling, logging, and documentation."
+expected_output: "Production-ready code implementation"
+success_criteria:
+  - "Code is clean and readable"
+  - "Follows language best practices"
+  - "Errors are properly handled"
+  - "Code is well-documented"

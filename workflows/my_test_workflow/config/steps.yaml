@@ -1,0 +1,29 @@
+description: Detailed step configuration
+steps:
+- id: 1
+  name: Gather Requirements
+  kind: llm
+  doc: Collect and analyze all requirements for the coding task
+  uses:
+  - requirements
+- id: 2
+  name: Design Solution
+  kind: llm
+  doc: Plan the architecture and approach for implementation
+  uses:
+  - requirements
+  - design
+- id: 3
+  name: Implement Code
+  kind: llm
+  doc: Write the actual code following the design plan
+  uses:
+  - design
+  - implement
+- id: 4
+  name: Test and Review
+  kind: llm
+  doc: Test the code, review for quality, and suggest improvements
+  uses:
+  - implement
+  - test
